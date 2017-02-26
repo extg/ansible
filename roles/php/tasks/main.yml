@@ -1,0 +1,41 @@
+gst---
+
+- name: Add repository for Ubuntu
+#  become: true
+  apt_repository: repo={{ php_ppa }}
+
+- name: Update apt
+#  become: true
+  apt: update_cache=yes
+
+- name: Install PHP
+#  become: true
+  apt: pkg=php7.0 state=latest
+
+- name: Install PHP Packages
+#  become: true
+  apt: pkg={{ item }} state=latest
+  with_items: "{{ php_packages }}"
+  when: php_packages is defined
+  notify: restart php7-fpm
+
+#- shell: touch /var/www/{{inventory_hostname}}/public/index.php && echo "<?php phpinfo();" > /var/www/{{inventory_hostname}}/public/index.php
+- include: composer.yml
+#- include: configure.yml
+
+- name: rm -rf /var/www/html
+  file: path=/var/www/html state=absent
+
+- name: phpenmod mcrypt
+  shell: phpenmod mcrypt
+  notify: restart php7-fpm
+
+- name: fix cgi.fix_pathinfo
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='cgi.fix_pathinfo='
+              line='cgi.fix_pathinfo=0'
+              insertafter="^[fix_pathinfo]"
+  notify: restart php7-fpm
+
+
+  #cgi.fix_pathinfo=0

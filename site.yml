@@ -3,4 +3,5 @@
 
 - hosts: example
   roles:
+    - {role: php}
     - {role: nginx, nginx_conf_template: php.conf.j2}
