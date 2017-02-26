@@ -9,14 +9,14 @@
       - ru_RU.utf8
 
   pre_tasks:
-    - name: install python
+    - name: Installing python
       raw: apt-get install python-apt -y
 
-    - name: set hostname
+    - name: Setting hostname
       shell: hostname "{{inventory_hostname}}"
       tags: set_hostname
 
-    - name: generate locale
+    - name: Generating locales
       shell: locale-gen "{{item}}"
       with_items: "{{locale_list}}"
       tags: generate_locale
