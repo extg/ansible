@@ -1,0 +1,19 @@
+---
+
+- name: Installing nginx
+  apt: pkg=nginx state=installed
+
+- name: Copying nginx confing
+  template: src={{nginx_conf_template}} dest=/etc/nginx/sites-available/{{inventory_hostname}}.conf
+  notify: Reloading nginx
+
+- name: Enabling site
+  file: src=/etc/nginx/sites-available/{{inventory_hostname}}.conf path=/etc/nginx/sites-enabled/{{inventory_hostname}}.conf state=link
+  notify: Reloading nginx
+
+- name: Removing default nginx config
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify: Reloading nginx
+
+- name: Setting up test page
+  shell: mkdir /var/www/{{inventory_hostname}} && echo "Hello Nginx" > /var/www/{{inventory_hostname}}/index.html
