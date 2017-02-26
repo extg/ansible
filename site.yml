@@ -1,0 +1,14 @@
+---
+# ansible-playbook -i inventory/hosts site.yml
+- hosts: example
+  roles:
+    - users
+    - common
+#    - nginx
+#    - node
+#    - php
+#    - git
+#    - env
+#    - postgresql
+#    - ssh
+#    - cron
