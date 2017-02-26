@@ -3,8 +3,10 @@
 
 - hosts: example
   gather_facts: false
-  vars_files:
-    - vars/locale_list.yml
+  vars:
+    locale_list:
+      - en_GB.utf8
+      - ru_RU.utf8
 
   pre_tasks:
     - name: install python
@@ -16,5 +18,5 @@
 
     - name: generate locale
       shell: locale-gen "{{item}}"
-      with_items: locale_list
+      with_items: "{{locale_list}}"
       tags: generate_locale
