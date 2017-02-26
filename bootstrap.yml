@@ -1,0 +1,20 @@
+---
+# ansible-playbook -i inventory/hosts bootstrap.yml
+
+- hosts: example
+  gather_facts: false
+  vars_files:
+    - vars/locale_list.yml
+
+  pre_tasks:
+    - name: install python
+      raw: apt-get install python-apt -y
+
+    - name: set hostname
+      shell: hostname "{{inventory_hostname}}"
+      tags: set_hostname
+
+    - name: generate locale
+      shell: locale-gen "{{item}}"
+      with_items: locale_list
+      tags: generate_locale
