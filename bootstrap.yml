@@ -20,3 +20,24 @@
       shell: locale-gen "{{item}}"
       with_items: "{{locale_list}}"
       tags: generate_locale
+
+  tasks:
+    - name: Installing base utilities
+      apt: pkg={{item}}
+      with_items:
+        - htop
+        - tmux
+        - tree
+
+    - name: Inslling Zsh
+      apt: pkg=zsh
+
+    - name: Inslling Oh My Zsh
+      shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+    - name: Creating aliases
+      shell: alias {{item}}
+      with_items:
+        - la='ls -la'
+        - ll='ls -AlFh'
+        - rf='rm -rf'
