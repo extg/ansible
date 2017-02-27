@@ -15,5 +15,5 @@
   file: path=/etc/nginx/sites-enabled/default state=absent
   notify: Reloading nginx
 
-- name: Setting up test page
-  shell: mkdir -p /var/www/{{inventory_hostname}} && echo "Hello Nginx" > /var/www/{{inventory_hostname}}/index.html &&  echo "<?php phpinfo();" > /var/www/{{inventory_hostname}}/index.php
+#- name: Setting up test page
+#  shell: mkdir -p /var/www/{{inventory_hostname}} && echo "Hello Nginx" > /var/www/{{inventory_hostname}}/index.html &&  echo "<?php phpinfo();" > /var/www/{{inventory_hostname}}/index.php

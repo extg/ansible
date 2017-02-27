@@ -46,3 +46,6 @@
         - prev='git checkout @{-1}'
         - ..='cd ../'
         - ...='cd ../../'
+
+    - name: Updating apt-get cache
+      apt: update_cache=yes cache_valid_time=3600
