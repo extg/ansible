@@ -1,0 +1,13 @@
+---
+
+git_user_name: git
+git_user_group: www-data
+git_user_home: /var/git
+git_user_createhome: true
+git_user_shell: /bin/bash
+
+git_authorized_key: ~/.ssh/id_rsa.pub
+git_deployment_key: ""
+
+git_remote: ""
+

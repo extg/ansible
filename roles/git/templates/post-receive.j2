@@ -1,0 +1,7 @@
+#!/bin/sh
+GIT_WORK_TREE=/var/www/{{inventory_hostname}} git checkout -f
+{% if git_post_receive_hook_commands is defined %}
+{% for command in git_post_receive_hook_commands %}
+{{ command }}
+{% endfor %}
+{% endif %}

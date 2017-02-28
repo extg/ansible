@@ -1,0 +1,13 @@
+---
+
+git_user_name: git
+git_user_group: www-data
+git_user_home: /var/git
+git_user_createhome: true
+git_user_shell: /usr/bin/git-shell
+
+git_authorized_key: "" # ключ чтобы заливать с локальной машины (git push origin master)
+git_deployment_key: "" # read-only key for Bitbucket or GitHub, чтобы получить доступ к репозиторию для сканивания файлов (деполя на сервер из удаленного репозитория)
+
+git_remote: ""
+
