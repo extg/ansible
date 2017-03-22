@@ -1,19 +1,22 @@
 ---
 
-- name: Installing nginx
+- name: install nginx
   apt: pkg=nginx state=installed
 
-- name: Copying nginx confing
+- name: copy nginx confing
   template: src={{nginx_conf_template}} dest=/etc/nginx/sites-available/{{inventory_hostname}}.conf
-  notify: Reloading nginx
+  notify: reload nginx
 
-- name: Enabling site
+- name: enable site
   file: src=/etc/nginx/sites-available/{{inventory_hostname}}.conf path=/etc/nginx/sites-enabled/{{inventory_hostname}}.conf state=link
-  notify: Reloading nginx
+  notify: reload nginx
 
-- name: Removing default nginx config
+- name: remove default nginx config
   file: path=/etc/nginx/sites-enabled/default state=absent
-  notify: Reloading nginx
+  notify: reload nginx
 
-#- name: Setting up test page
-#  shell: mkdir -p /var/www/{{inventory_hostname}} && echo "Hello Nginx" > /var/www/{{inventory_hostname}}/index.html &&  echo "<?php phpinfo();" > /var/www/{{inventory_hostname}}/index.php
+#- name: set up a test html page
+#  shell: mkdir -p /var/www/{{inventory_hostname}} && echo "Hello Nginx" > /var/www/{{inventory_hostname}}/index.html
+
+#- name: set up a test php page
+#  shell: mkdir -p /var/www/{{inventory_hostname}} && echo "<?php phpinfo();" > /var/www/{{inventory_hostname}}/index.php

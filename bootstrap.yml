@@ -9,7 +9,7 @@
       - ru_RU.utf8
 
   pre_tasks:
-    - name: Installing python
+    - name: install python
       raw: apt-get install python-apt -y
 
     - name: Setting hostname
@@ -22,20 +22,20 @@
       tags: generate_locale
 
   tasks:
-    - name: Installing base utilities
+    - name: install base utilities
       apt: pkg={{item}}
       with_items:
         - htop
         - tmux
         - tree
 
-    - name: Inslling Zsh
+    - name: install Zsh
       apt: pkg=zsh
 
-    - name: Inslling Oh My Zsh
+    - name: install Oh My Zsh
       shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
-    - name: Creating aliases
+    - name: create aliases
       shell: alias {{item}}
       with_items:
         - la='ls -la'

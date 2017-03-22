@@ -1,6 +1,6 @@
 ---
 
-- name: Installing git
+- name: install git
   apt: pkg=git state=installed
 
 - name: Checking group www-data exists
@@ -17,14 +17,14 @@
 
 
 # Создаем --work-tree
-- name: Creating /var/www
+- name: create /var/www
   file: path=/var/www
         owner="{{git_user_name}}"
         group="{{git_user_group}}"
         state=directory
         mode=775 # mode=2775 # SUID и SGID - 4000 и 2000
 
-- name: Creating /var/www/{{inventory_hostname}}
+- name: create /var/www/{{inventory_hostname}}
   file: state=directory
         path=/var/www/{{inventory_hostname}}
         owner="{{git_user_name}}"
@@ -38,7 +38,7 @@
     key: "{{lookup('file', git_authorized_key)}}"
   when: git_authorized_key != "" # по умолчанию ~/.ssh/id_rsa.pub
 
-- name: Creating deployment key for user git
+- name: create deployment key for user git
   copy: src="{{git_deployment_key}}"
         dest="{{git_user_home}}/.ssh/id_rsa"
         owner="{{git_user_name}}"
@@ -46,7 +46,7 @@
         mode=0600
   when: git_deployment_key != ""
 
-- name: Creating deployment public key for user git
+- name: create deployment public key for user git
   copy: src="{{git_deployment_key}}.pub"
         dest="{{git_user_home}}/.ssh/id_rsa.pub"
         owner="{{git_user_name}}"
@@ -54,8 +54,8 @@
         mode=0644
   when: git_deployment_key != ""
 
-# Initializing repository
-- name: Initializing git bare repository
+# init repository
+- name: init git bare repository
   become: true
   become_user: "{{git_user_name}}"
   shell: git init --bare "/var/git/{{inventory_hostname}}.git"
@@ -65,7 +65,7 @@
     msg: "git remote add origin ssh://{{git_user_name}}@{{ansible_host}}/var/git/{{inventory_hostname}}.git"
   when: git_remote == "" or git_deployment_key == ""
 
-- name: Clone the Git repo
+- name: clone the git repo
   become: true
   become_user: "{{git_user_name}}"
   git: repo="{{git_remote}}"
@@ -75,7 +75,7 @@
        key_file="{{home}}/.ssh/id_rsa"
   when: git_remote != "" and git_deployment_key != ""
 
-- name: Git checkout master
+- name: git checkout master
   become: true
   become_user: "{{git_user_name}}"
   shell:  git --work-tree="/var/www/{{inventory_hostname}}/" --git-dir="/var/git/{{inventory_hostname}}.git" checkout master -f
