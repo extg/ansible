@@ -1,4 +1,4 @@
-gst---
+---
 
 - name: Add repository for Ubuntu
 #  become: true

@@ -1,12 +1,12 @@
 ---
 
-- name: install git
+- name: Install git
   apt: pkg=git state=installed
 
-- name: Checking group www-data exists
+- name: Check group www-data exists
   group: name=www-data state=present
 
-- name: Adding user git
+- name: Add user git
   user:
     name: "{{git_user_name}}"
     system: true
@@ -17,14 +17,14 @@
 
 
 # Создаем --work-tree
-- name: create /var/www
+- name: Create /var/www
   file: path=/var/www
         owner="{{git_user_name}}"
         group="{{git_user_group}}"
         state=directory
-        mode=775 # mode=2775 # SUID и SGID - 4000 и 2000
+        mode=775
 
-- name: create /var/www/{{inventory_hostname}}
+- name: Create /var/www/{{inventory_hostname}}
   file: state=directory
         path=/var/www/{{inventory_hostname}}
         owner="{{git_user_name}}"
@@ -32,13 +32,13 @@
         mode=775
 
 # Доступы
-- name: Adding git's authorized key
+- name: Add git's authorized key
   authorized_key:
     user: git
     key: "{{lookup('file', git_authorized_key)}}"
   when: git_authorized_key != "" # по умолчанию ~/.ssh/id_rsa.pub
 
-- name: create deployment key for user git
+- name: Create deployment key for user git
   copy: src="{{git_deployment_key}}"
         dest="{{git_user_home}}/.ssh/id_rsa"
         owner="{{git_user_name}}"
@@ -46,7 +46,7 @@
         mode=0600
   when: git_deployment_key != ""
 
-- name: create deployment public key for user git
+- name: Create deployment public key for user git
   copy: src="{{git_deployment_key}}.pub"
         dest="{{git_user_home}}/.ssh/id_rsa.pub"
         owner="{{git_user_name}}"
@@ -55,7 +55,7 @@
   when: git_deployment_key != ""
 
 # init repository
-- name: init git bare repository
+- name: Init git bare repository
   become: true
   become_user: "{{git_user_name}}"
   shell: git init --bare "/var/git/{{inventory_hostname}}.git"
@@ -65,7 +65,7 @@
     msg: "git remote add origin ssh://{{git_user_name}}@{{ansible_host}}/var/git/{{inventory_hostname}}.git"
   when: git_remote == "" or git_deployment_key == ""
 
-- name: clone the git repo
+- name: Clone the git repo
   become: true
   become_user: "{{git_user_name}}"
   git: repo="{{git_remote}}"
@@ -75,14 +75,14 @@
        key_file="{{home}}/.ssh/id_rsa"
   when: git_remote != "" and git_deployment_key != ""
 
-- name: git checkout master
+- name: Git checkout master
   become: true
   become_user: "{{git_user_name}}"
   shell:  git --work-tree="/var/www/{{inventory_hostname}}/" --git-dir="/var/git/{{inventory_hostname}}.git" checkout master -f
   when: git_remote != "" and git_deployment_key != ""
 
-# Устанавливаем git hook для обновления рабочей директории при пуше
-- name: preseed post-receive hook
+# Устанавливаем git hook для обновления рабочей директории после выполнения git push в этот репозиторий
+- name: Preseed post-receive hook
   template: src=post-receive.j2
             dest="/var/git/{{inventory_hostname}}.git/hooks/post-receive"
             owner="{{git_user_name}}"

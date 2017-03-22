@@ -1,0 +1,105 @@
+---
+
+- name: Downlaod opencart
+  get_url:
+    url: "{{opencart_url}}"
+    dest: /tmp/opencart.zip
+    owner: git
+    group: www-data
+
+- name: Create /tmp/opencart
+  file:
+    path: /tmp/opencart
+    state: directory
+    owner: git
+    group: www-data
+
+- name: Unzip opencart
+  unarchive:
+    src: /tmp/opencart.zip
+    remote_src: true
+    dest: /tmp/opencart
+    owner: git
+    group: www-data
+
+- name: Move opencart/**/upload/* to /var/www/{{inventory_hostname}}
+  shell: mv /tmp/opencart/**/upload/* "/var/www/{{inventory_hostname}}/"
+
+- name: Clear temp data
+  shell: rm -rf /tmp/opencart*
+
+- name: Rename config-dist.php
+  shell: mv config-dist.php config.php
+  args:
+    chdir: "/var/www/{{inventory_hostname}}"
+
+- name: Rename admin/config-dist.php
+  shell: mv admin/config-dist.php admin/config.php
+  args:
+    chdir: "/var/www/{{inventory_hostname}}"
+
+- name: Set ownwer /var/www/{{inventory_hostname}}
+  file:
+    path: "/var/www/{{inventory_hostname}}"
+    owner: git
+    group: www-data
+    recurse: true
+
+- name: Change mod "/var/www/{{inventory_hostname}}/system/storage/cache/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/system/storage/cache/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/system/storage/logs/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/system/storage/logs/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/system/storage/download/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/system/storage/download/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/system/storage/upload/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/system/storage/upload/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/system/storage/modification/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/system/storage/modification/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/image/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/image/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/image/cache/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/image/cache/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/image/catalog/"
+  file:
+    path: "/var/www/{{inventory_hostname}}/image/catalog/"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/config.php"
+  file:
+    path: "/var/www/{{inventory_hostname}}/config.php"
+    mode: 0775
+
+- name: Change mod "/var/www/{{inventory_hostname}}/admin/config.php"
+  file:
+    path: "/var/www/{{inventory_hostname}}/admin/config.php"
+    mode: 0775
+
+# Там в русской сборке что-то в модификаторах ломается, поэтому дадим права на все
+- name: Change mod "/var/www/{{inventory_hostname}}"
+  file:
+    path: "/var/www/{{inventory_hostname}}"
+    mode: 0775
+    recurse: true
+
+
