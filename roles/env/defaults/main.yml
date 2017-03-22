@@ -1,0 +1,7 @@
+
+# defaul env_vars for node, its jsut example
+env_vars:
+  APP_PATH: server/app.js
+  WORKER_COUNT: 2
+  PORT: 8080
+  HOSTNAME: "{{inventory_hostname}}"

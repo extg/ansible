@@ -1,0 +1,23 @@
+---
+# ansible-playbook -i inventory/hosts site-nodejs.yml
+
+- hosts: site
+  vars:
+    node_port: 3000
+
+  roles:
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: "{{node_port}}"
+
+    - role: node
+      node_start_file: server.js
+
+    - role: git
+      git_post_receive_hook_commands:
+        - npm install
+        - npm run build
+
+    - role: env
+      env_vars:
+        NODE_PORT: "{{node_port}}"

@@ -1,5 +1,5 @@
 ---
-# ansible-playbook -i inventory/hosts site.yml
+# ansible-playbook -i inventory/hosts site-opencart.yml
 
 - hosts: site
   roles:

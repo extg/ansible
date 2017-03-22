@@ -62,7 +62,7 @@
   when: git_remote == "" or git_deployment_key == ""
 
 - debug:
-    msg: "git remote add origin ssh://{{git_user_name}}@{{ansible_host}}/var/git/{{inventory_hostname}}.git"
+    msg: "git remote add production ssh://{{git_user_name}}@{{ansible_host}}/var/git/{{inventory_hostname}}.git"
   when: git_remote == "" or git_deployment_key == ""
 
 - name: Clone the git repo

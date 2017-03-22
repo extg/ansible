@@ -1,17 +1,17 @@
 ---
 
-- name: install nginx
+- name: Install nginx
   apt: pkg=nginx state=installed
 
-- name: copy nginx confing
+- name: Copy nginx confing
   template: src={{nginx_conf_template}} dest=/etc/nginx/sites-available/{{inventory_hostname}}.conf
   notify: reload nginx
 
-- name: enable site
+- name: Enable site
   file: src=/etc/nginx/sites-available/{{inventory_hostname}}.conf path=/etc/nginx/sites-enabled/{{inventory_hostname}}.conf state=link
   notify: reload nginx
 
-- name: remove default nginx config
+- name: Remove default nginx config
   file: path=/etc/nginx/sites-enabled/default state=absent
   notify: reload nginx
 

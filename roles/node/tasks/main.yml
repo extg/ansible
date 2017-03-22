@@ -1,0 +1,30 @@
+---
+
+- name: Install node
+  shell: "{{ item }}"
+  with_items:
+      - curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+      - apt-get install -y nodejs
+
+- name: Setup node service
+  template: src=node.service.j2 dest=/etc/systemd/system/node.service
+  tags: node_setup_service
+
+- name: Enable node service
+  service: enabled=yes name=node
+
+- name: Update npm
+  npm: name=npm state=latest global=yes
+
+- name: Install webpack globaly
+  npm: name=webpack global=yes
+
+- name: Install gulp globaly
+  npm: name=gulp global=yes
+
+- name: Make helloword
+  copy: src=helloworld.js dest=/var/www/{{inventory_hostname}} owner=web
+  when: enable_helloworld
+
+- name: Start node service
+  service: name=node state=started
