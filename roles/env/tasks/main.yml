@@ -1,5 +1,0 @@
----
-
-- name: Create env file /var/www/{{inventory_hostname}}/.env
-  template: src=env.j2 dest=/var/www/{{inventory_hostname}}/.env owner=git group=www-data
-  tags: env

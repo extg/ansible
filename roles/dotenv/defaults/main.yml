@@ -1,6 +1,6 @@
 
-# defaul env_vars for node, its jsut example
-env_vars:
+# defaul dotenv_vars for node, its jsut example
+dotenv_vars:
   APP_PATH: server/app.js
   WORKER_COUNT: 2
   PORT: 8080

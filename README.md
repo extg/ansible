@@ -16,6 +16,11 @@
 
 ## Quick start
 
+```bash
+cp inventory/hosts.example inventory/hosts
+cp examples/site-nodejs.yml sites/my-site.yml
+```
+
 1. Укажите данные для подключения в `inventory/hosts`
 2. Укажите в `boostrap.yml` в задаче `Install base utilities` какие вам нужны предустановленные
   пакеты на сервере (не указывайте, то что устанавливается через роли)
