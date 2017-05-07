@@ -17,4 +17,4 @@ git_remote: ""
 
 # список команд которые будут выполнены после добавления изменений в удаленный репозиторий
 git_post_receive_hook_commands:
-  - git status
+  - GIT_WORK_TREE=/var/www/{{inventory_hostname}} git status

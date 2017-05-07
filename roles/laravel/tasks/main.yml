@@ -1,17 +1,20 @@
 ---
 
-- name: Build project (composer install, migrate, webpack, gulp)
-  become: true
-  become_user: git
-  shell: "{{item}}"
-  args:
-    chdir: /var/www/{{inventory_hostname}}
-  with_items:
-    - composer install
-    - composer dump-autoload
-
 - name: Setup laravel storage permissions
   file: path=/var/www/{{inventory_hostname}}/storage mode=0775 recurse=true
 
 - name: Setup laravel bootstrap permissions
   file: path=/var/www/{{inventory_hostname}}/bootstrap/cache mode=0775 recurse=true
+
+# TODO: если проект еще не выкача из удаленного репозитория, то тут будет ошибка
+# TODO: поэтому пока просто закоментил, но нужно подумать как сделать нормально
+#- name: Build project (composer install, migrate, webpack, gulp)
+#  become: true
+#  become_user: git
+#  shell: "{{item}}"
+#  args:
+#    chdir: /var/www/{{inventory_hostname}}
+#  with_items:
+#    - composer install
+#    - composer dump-autoload
+#    - php artisan key:generate
