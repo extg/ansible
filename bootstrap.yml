@@ -28,6 +28,7 @@
         - htop
         - tmux
         - tree
+        - unzip
 
     - name: Install Zsh
       apt: pkg=zsh
