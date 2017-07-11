@@ -1,0 +1,8 @@
+---
+
+- name: Downlaod opencart
+  get_url:
+    url: "{{opencart_url}}"
+    dest: /tmp/opencart.zip
+    owner: git
+    group: www-data

@@ -1,0 +1,9 @@
+---
+
+- name: Copy to remote
+  copy:
+    src: "{{opencart_src}}"
+    dest: /tmp/opencart.zip
+    owner: git
+    group: www-data
+    mode: 0775

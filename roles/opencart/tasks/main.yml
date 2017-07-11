@@ -1,11 +1,12 @@
 ---
 
-- name: Downlaod opencart
-  get_url:
-    url: "{{opencart_url}}"
-    dest: /tmp/opencart.zip
-    owner: git
-    group: www-data
+- include: copy_from_local.yml
+  static: no
+  when: opencart_src is defined
+
+- include: load_by_url.yml
+  static: no
+  when: opencart_src is undefined
 
 - name: Create /tmp/opencart
   file:

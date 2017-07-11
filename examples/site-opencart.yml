@@ -11,3 +11,5 @@
       mysql_databases:
         - name: opencart
     - role: opencart
+      opencart_src: /local/path/to/upload.zip
+#      opencart_url: https://example.com/opencart.zip # which contains 'upload' dir
