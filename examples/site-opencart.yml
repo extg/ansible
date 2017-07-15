@@ -4,7 +4,7 @@
 - hosts: site
   roles:
     - role: nginx
-      nginx_conf_template: php.conf.j2
+      nginx_conf_template: opencart.conf.j2
     - role: php
     - role: git
     - role: mysql
