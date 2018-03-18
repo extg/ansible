@@ -1,2 +1,13 @@
 [Service]
-WorkingDirectory=/var/www/{{inventory_hostname}}
+WorkingDirectory={{node_working_directory}}
+ExecStart=/usr/bin/node {{node_start_file}}
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=node.{{inventory_hostname}}
+User=www-data
+Group=www-data
+Environment='NODE_ENV=production'
+
+[Install]
+WantedBy=multi-user.target

@@ -46,10 +46,7 @@
         - la='ls -la'
         - ll='ls -AlFh'
         - rf='rm -rf'
-        - go='git checkout'
-        - gc='git commit'
         - push='git push origin HEAD'
-        - prev='git checkout @{-1}'
         - ..='cd ../'
         - ...='cd ../../'
 

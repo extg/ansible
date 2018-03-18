@@ -1,5 +1,4 @@
 ---
 
-
-node_start_file: helloworld.js
-enable_helloworld: false
+node_working_directory: /var/www/{{inventory_hostname}}
+node_start_file: index.js
