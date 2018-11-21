@@ -1,0 +1,19 @@
+# https://github.com/ansible/ansible/issues/5241#issuecomment-31438159
+# https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04
+
+- name: Create a swap file
+  command: dd if=/dev/zero of=/swapfile bs=1M count=1024
+  when: ansible_swaptotal_mb < 1
+
+- name: Make swap
+  command: mkswap /swapfile
+  when: ansible_swaptotal_mb < 1
+
+- name: Add to fstab
+  action: lineinfile dest=/etc/fstab regexp="swapfile" line="/swapfile none swap sw 0 0" state=present
+
+- name: Turn swap on
+  command: swapon -a
+
+- name: Set swapiness
+  shell: echo 0 | sudo tee /proc/sys/vm/swappiness

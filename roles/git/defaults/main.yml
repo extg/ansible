@@ -15,6 +15,8 @@ git_deployment_key: ""
 
 git_remote: ""
 
+git_key_file: "{{ansible_env.HOME}}/.ssh/id_rsa"
+
 # список команд которые будут выполнены после добавления изменений в удаленный репозиторий
-git_post_receive_hook_commands:
-  - GIT_WORK_TREE=/var/www/{{inventory_hostname}} git status
+#git_post_receive_hook_commands:
+#  - GIT_WORK_TREE=/var/www/{{inventory_hostname}} git status

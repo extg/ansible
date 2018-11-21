@@ -72,7 +72,7 @@
        dest="/var/git/{{inventory_hostname}}.git"
        bare=true
        accept_hostkey=true
-       key_file="{{home}}/.ssh/id_rsa"
+       key_file="{{git_key_file}}"
   when: git_remote != "" and git_deployment_key != ""
 
 - name: Git checkout master

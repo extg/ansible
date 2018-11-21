@@ -1,5 +1,7 @@
 ---
 
 nginx_conf_template: default.j2
-nginx_node_port: 3000
+nginx_node_port: 8080
 nginx_root: /var/www/html
+nginx_server_name: site.com www.site.com default
+nginx_config_name: site.come.conf

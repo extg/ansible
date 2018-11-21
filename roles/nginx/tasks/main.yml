@@ -4,11 +4,11 @@
   apt: pkg=nginx state=installed
 
 - name: Copy nginx confing
-  template: src={{nginx_conf_template}} dest=/etc/nginx/sites-available/{{inventory_hostname}}.conf
+  template: src={{nginx_conf_template}} dest=/etc/nginx/sites-available/{{nginx_config_name}}
   notify: reload nginx
 
 - name: Enable site
-  file: src=/etc/nginx/sites-available/{{inventory_hostname}}.conf path=/etc/nginx/sites-enabled/{{inventory_hostname}}.conf state=link
+  file: src=/etc/nginx/sites-available/{{nginx_config_name}} path=/etc/nginx/sites-enabled/{{nginx_config_name}} state=link
   notify: reload nginx
 
 - name: Remove default nginx config

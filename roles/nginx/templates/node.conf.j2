@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name {{inventory_hostname}} www.{{inventory_hostname}} default;
+    server_name {{nginx_server_name}};
     root {{nginx_root}};
 
     location / {

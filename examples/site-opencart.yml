@@ -1,6 +1,8 @@
 ---
 # ansible-playbook -i inventory/hosts sites/site-opencart.yml
 
+- import_playbook: ../bootstrap.yml
+
 - hosts: site
   roles:
     - role: nginx

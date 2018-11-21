@@ -7,7 +7,7 @@
 
 - name: Install the nodejs LTS repos
   apt_repository:
-    repo: "deb https://deb.nodesource.com/node_6.x {{ ansible_distribution_release }} main"
+    repo: "deb https://deb.nodesource.com/node_8.x {{ ansible_distribution_release }} main"
     state: present
     update_cache: yes
 
@@ -16,8 +16,13 @@
     name: nodejs
     state: present
 
+- name: Install the build-essential
+  apt:
+    name: build-essential
+    state: present
+
 - name: Setup node service
-  template: src=node.service.j2 dest=/etc/systemd/system/node.service
+  template: src=node.service.j2 dest=/etc/systemd/system/{{node_service_name}}.service
   tags: node_setup_service
 
 #- name: Enable node service
