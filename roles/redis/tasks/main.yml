@@ -1,0 +1,83 @@
+---
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install the Build and Test Dependencies
+  become: true
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - build-essential
+      - tcl
+
+- name: Download Redis
+  shell: curl -O http://download.redis.io/redis-stable.tar.gz
+  args:
+    chdir: /tmp
+
+- name: Extract the Source Code
+  shell: tar xzvf redis-stable.tar.gz
+  args:
+    chdir: /tmp
+
+- make:
+    chdir: /tmp/redis-stable
+
+# TODO: Тестов много, проходят долго, может вынести под флаг?
+#- make:
+#    chdir: /tmp/redis-stable
+#    target: test
+
+- make:
+    chdir: /tmp/redis-stable
+    target: install
+  become: yes
+
+- name: Creates /etc/redis
+  file:
+    path: /etc/redis
+    state: directory
+  become: yes
+
+- name: Copy /tmp/redis-stable/redis.conf to /etc/redis
+  command: cp /tmp/redis-stable/redis.conf /etc/redis
+  become: yes
+
+- lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^supervised'
+    line: 'supervised systemd'
+
+- lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^dir'
+    line: 'dir /var/lib/redis'
+
+- name: Create a Redis systemd Unit File
+  template: src={{redis_service_template}} dest=/etc/systemd/system/redis.service
+
+- name: Add the redis user
+  user:
+    name: redis
+    createhome: no
+    system: yes
+
+- file:
+    path: /var/lib/redis
+    state: directory
+    mode: 0770
+    owner: redis
+    group: redis
+
+- name: Start redis service
+  service: name=redis state=started
+  args:
+    enabled: yes
