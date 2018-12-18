@@ -1,0 +1,113 @@
+---
+# ansible-playbook -i inventory/hosts sites/dafisha.yml
+
+- import_playbook: ../bootstrap.yml
+# TODO: настройка свопа https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04
+# TODO: установка yarn https://stackoverflow.com/questions/42606941/install-yarn-ubuntu-16-04-linux-mint-18-1?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
+- hosts: site
+  vars:
+    local_root_path: "/Users/extg/Workspaces/dafisha/dafisha.ru"
+
+  roles:
+    - role: swap
+      tags:
+        - swap
+
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: 8080
+      nginx_root: "/var/www/{{inventory_hostname}}/packages/dafisha-api"
+      nginx_server_name: "api.dafisha.ru"
+      nginx_config_name: "api.dafisha.ru.conf"
+      tags:
+        - nginx
+
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: 8081
+      nginx_root: "/var/www/{{inventory_hostname}}/packages/dafisha-main"
+      nginx_server_name: "dafisha.ru"
+      nginx_config_name: "dafisha.ru.conf"
+      tags:
+        - nginx
+
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: 8082
+      nginx_root: "/var/www/{{inventory_hostname}}/packages/dafisha-admin"
+      nginx_server_name: "admin.dafisha.ru default"
+      nginx_config_name: "admin.dafisha.ru.conf"
+      tags:
+        - nginx
+
+    - role: git
+      git_deployment_key: "/Users/extg/Workspaces/dafisha/dafisha.ru/credentials/dafisha_deployment_key"
+      git_remote: "git@bitbucket.org:dafisha/dafisha.ru.git"
+      git_key_file: "{{ansible_env.HOME}}/.ssh/id_rsa"
+#      git_post_receive_hook_commands:
+#        - cd /var/www/{{inventory_hostname}}
+#        - npm install
+#        - cd /var/www/{{inventory_hostname}}/packages/dafisha
+#        - npm install
+#        - NODE_ENV=production npm run build
+#        - cd /var/www/{{inventory_hostname}}/packages/dafisha-api
+#        - npm install
+#        - NODE_ENV=production npm run build
+#        - service dafisha-node reload
+#        - service dafisha-api-node reload
+
+# TODO: добавить build-essential в роль node (нужно чтобы работал make)
+# https://stackoverflow.com/questions/14772508/npm-failed-to-install-time-with-make-not-found-error
+# sudo apt-get install build-essential
+
+    - role: node
+      node_service_name: dafisha-main-node
+      node_working_directory: "/var/www/{{inventory_hostname}}/packages/dafisha-main"
+      node_start_file: server.js
+      tags:
+        - node
+        - dafisha-main
+
+    - role: node
+      node_service_name: dafisha-api-node
+      node_working_directory: "/var/www/{{inventory_hostname}}/packages/dafisha-api"
+      node_start_file: server.js
+      tags:
+        - node
+
+    - role: node
+      node_service_name: dafisha-admin-node
+      node_working_directory: "/var/www/{{inventory_hostname}}/packages/dafisha-admin"
+      node_start_file: server.js
+      tags:
+        - node
+
+    - role: redis
+      tags:
+        - redis
+
+#  tasks:
+#    - name: Istall yarn
+#      command: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+#        echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+#  tasks:
+#    - git:
+#        repo: "{{local_root_path}}"
+#        dest: "/var/git/{{inventory_hostname}}"
+
+#    - copy:
+#        src: "{{local_root_path}}/{{item}}"
+#        dest: "/var/www/{{inventory_hostname}}/{{item}}"
+#        owner: git
+#        group: git
+#        mode: 0644
+#    with_items:
+#         - credentials
+#         - packages/dafisha/.env.production
+#         - packages/dafisha-api/.env.production
+
+#    - name: Install "lerna" node.js package globally.
+#      npm:
+#        name: lerna
+#        global: yes
