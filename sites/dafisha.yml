@@ -81,6 +81,10 @@
       tags:
         - redis
 
+    - role: yarn
+      tags:
+        - yarn
+
   tasks:
     - name: Install "lerna" npm package globally
       npm:
