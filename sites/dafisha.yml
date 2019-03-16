@@ -1,5 +1,5 @@
 ---
-# ansible-playbook -i inventory/hosts sites/dafisha.yml
+# ansible-playbook -i inventory/hosts sites/dafisha.yml --tags="node"
 
 - import_playbook: ../bootstrap.yml
 
@@ -57,6 +57,7 @@
       node_service_name: dafisha-main-node
       node_working_directory: "/var/www/{{inventory_hostname}}/packages/dafisha-main"
       node_start_file: server.js
+      node_syslog_identifier: node.dafisha
       tags:
         - node
         - dafisha-main
@@ -65,6 +66,7 @@
       node_service_name: dafisha-api-node
       node_working_directory: "/var/www/{{inventory_hostname}}/packages/dafisha-api"
       node_start_file: server.js
+      node_syslog_identifier: node.dafisha
       tags:
         - node
         - dafisha-api
@@ -73,6 +75,7 @@
       node_service_name: dafisha-admin-node
       node_working_directory: "/var/www/{{inventory_hostname}}/packages/dafisha-admin"
       node_start_file: server.js
+      node_syslog_identifier: node.dafisha
       tags:
         - node
         - dafisha-admin

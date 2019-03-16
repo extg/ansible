@@ -2,9 +2,9 @@
 WorkingDirectory={{node_working_directory}}
 ExecStart=/usr/bin/node {{node_start_file}}
 Restart=always
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=node.{{inventory_hostname}}
+StandardOutput=syslog+console
+StandardError=syslog+console
+SyslogIdentifier={{node_syslog_identifier}}
 User=www-data
 Group=www-data
 Environment='NODE_ENV=production'

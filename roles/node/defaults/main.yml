@@ -3,3 +3,4 @@
 node_service_name: node
 node_working_directory: /var/www/{{inventory_hostname}}
 node_start_file: index.js
+node_syslog_identifier: node.{{inventory_hostname}}

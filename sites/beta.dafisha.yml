@@ -1,5 +1,5 @@
 ---
-# ansible-playbook -i inventory/hosts sites/beta.dafisha.yml
+# ansible-playbook -i inventory/hosts sites/beta.dafisha.yml --tags="node"
 
 - hosts: site
   vars:
@@ -40,6 +40,7 @@
       node_service_name: dafisha-beta-main-node
       node_working_directory: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-main"
       node_start_file: server.js
+      node_syslog_identifier: node.beta.dafisha
       tags:
         - node
         - dafisha-main
@@ -48,6 +49,7 @@
       node_service_name: dafisha-beta-api-node
       node_working_directory: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-api"
       node_start_file: server.js
+      node_syslog_identifier: node.beta.dafisha
       tags:
         - node
         - dafisha-api
@@ -56,6 +58,7 @@
       node_service_name: dafisha-beta-admin-node
       node_working_directory: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-admin"
       node_start_file: server.js
+      node_syslog_identifier: node.beta.dafisha
       tags:
         - node
         - dafisha-admin
