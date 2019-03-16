@@ -1,7 +1,7 @@
 ---
 
 - name: Install nginx
-  apt: pkg=nginx state=installed
+  apt: pkg=nginx state=present
 
 - name: Copy nginx confing
   template: src={{nginx_conf_template}} dest=/etc/nginx/sites-available/{{nginx_config_name}}

@@ -1,0 +1,61 @@
+---
+# ansible-playbook -i inventory/hosts sites/beta.dafisha.yml
+
+- hosts: site
+  vars:
+    local_root_path: "/Users/extg/Workspaces/dafisha/dafisha.ru"
+
+  roles:
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: 8180
+      nginx_root: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-api"
+      nginx_server_name: "api.beta.dafisha.ru"
+      nginx_config_name: "api.beta.dafisha.ru.conf"
+      tags:
+        - nginx
+        - dafisha-api
+
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: 8181
+      nginx_root: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-main"
+      nginx_server_name: "beta.dafisha.ru"
+      nginx_config_name: "beta.dafisha.ru.conf"
+      tags:
+        - nginx
+        - dafisha-main
+
+    - role: nginx
+      nginx_conf_template: node.conf.j2
+      nginx_node_port: 8182
+      nginx_root: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-admin"
+      nginx_server_name: "admin.beta.dafisha.ru default"
+      nginx_config_name: "admin.beta.dafisha.ru.conf"
+      tags:
+        - nginx
+        - dafisha-admin
+
+    - role: node
+      node_service_name: dafisha-beta-main-node
+      node_working_directory: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-main"
+      node_start_file: server.js
+      tags:
+        - node
+        - dafisha-main
+
+    - role: node
+      node_service_name: dafisha-beta-api-node
+      node_working_directory: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-api"
+      node_start_file: server.js
+      tags:
+        - node
+        - dafisha-api
+
+    - role: node
+      node_service_name: dafisha-beta-admin-node
+      node_working_directory: "/var/www/beta.{{inventory_hostname}}/packages/dafisha-admin"
+      node_start_file: server.js
+      tags:
+        - node
+        - dafisha-admin
