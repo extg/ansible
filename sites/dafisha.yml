@@ -24,6 +24,12 @@
         - dafisha-admin
 
     - role: nginx
+      nginx_server_name: "delafisha.ru www.delafisha.ru"
+      nginx_root: "/var/www/{{inventory_hostname}}/packages/delafisha"
+      tags:
+        - delafisha
+
+    - role: nginx
       nginx_conf_template: node.conf.j2
       nginx_node_port: 8080
       nginx_root: "/var/www/{{inventory_hostname}}/packages/dafisha-api"
